@@ -1,0 +1,12 @@
+import maya.cmds as cmds
+import maya.mel as mel
+import sys
+
+# get Skorge folder location
+skorgePath = cmds.internalVar(userScriptDir = True) + "Skorge/"
+
+sys.path.append(skorgePath)
+
+# run Skorge
+import Modules.Skorge as Skorge
+reload (Skorge)
