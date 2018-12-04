@@ -55,11 +55,11 @@ def main():
     # set up main UI window
     window = cmds.window(title = "SkyeTools 1.0", topLeftCorner = [300, 360], backgroundColor = [0.15, 0.15, 0.15], toolbox = True)
     cmds.columnLayout(adjustableColumn = True)
-    
+
     # SkyeTools icon
     cmds.iconTextButton(style = "iconOnly", image1 = iconPath + "SkyeTools.png")
     dash()
-    
+
     # Project Shelf UI
     frame("QuickShelf", False, "A persistent shelf which stays with your project. Middle mouse drag-and-drop to add items.")
     shelf()
@@ -68,19 +68,19 @@ def main():
     b("Save Shelf", "QuickShelf.exportShelf()", "Save to " + projScripts)
     closeFrame()
     dash()
-    
+
     # QuickSelect UI
     frame("QuickSelect", True, "Quickly create and access selection sets.")
     b("Add New", "", "Create QuickSelect set from selection.")
     closeFrame()
     dash()
-    
+
     # Mesh Actions UI
     frame("Mesh Actions", True, "Perform various actions on meshes.")
     b("Unite Meshes", "", "Combine and merge meshes.")
     closeFrame()
     dash()
-    
+
     # Mirroring UI
     frame("Mirroring", True, "Mirror meshes comprehensively.")
     cb("Use Object Pivot", "", "", "")
@@ -90,23 +90,23 @@ def main():
     b("Mirror Z", "", "")
     closeFrame()
     dash()
-    
+
     # Shading UI
     frame("Shading", True, "Assign default shader models.")
     b("Blinn", "", "")
     b("Lambert", "", "")
     closeFrame()
     dash()
-    
+
     # Basemesh UI
     frame("Basemesh", False, "Create useful basemeshes for reference or to kickstart modeling.")
     b("Create Human", "Basemesh.makeHuman()", "Create a human basemesh. Default height is 180cm.")
     closeFrame()
-    
+
     # Exporter UI
     frame("Exporter", False, "")
     b("Export Copy", "Exporter.export()", "Export a copy from the scene origin.")
     closeFrame()
-    
+
     # show main UI window
     cmds.showWindow(window)
