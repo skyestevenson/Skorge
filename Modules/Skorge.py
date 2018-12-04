@@ -42,7 +42,7 @@ def getMayaWindow():
 mainMayaWindow = getMayaWindow()
 
 font = QFont("Calibri")
-font.setPointSize(14)
+font.setPointSize(10)
 font.setBold(True)
 
 def makeStyle(propList):
@@ -58,21 +58,22 @@ buttonStyle = makeStyle([
 		"background-color: rgb(30, 30, 30);",
 		"selection-color: rgb(255, 255, 255);",
 		"selection-background-color: rgb(0, 187, 255);",
-		"border-radius: 10px;",
+		"border-radius: 5px;",
 		"border-style: outset;",
-		"border-width: 0px;"
+		"border-width: 0px;",
+        "min-width: 50px;",
+        "min-height: 20px;"
 	])
 
 windowStyle = makeStyle([
-		"margin: 5px;"
 	])
 
 class W:
 	def __init__(self, parent, name = ""):
 		self.w = QMainWindow(parent)
 		self.w.setObjectName(name)
-		self.w.setMinimumSize(240, 100)
-		self.w.setMaximumWidth(240)
+		self.w.setMinimumSize(200, 100)
+		self.w.setMaximumWidth(200)
 		self.w.setStyleSheet(windowStyle)
 		self.w.show()
 
@@ -81,27 +82,29 @@ class B:
 	def __init__(self, text, style):
 		self.t = text
 
-		self.b = QPushButton(self.t)
+		self.b = QPushButton(self.t, self)
 		self.b.setFont(font)
 		self.b.setMinimumSize(240, 60)
 		self.b.setStyleSheet(style)
-		self.b.show()
+        self.b.clicked.connect(self.button_onClicked)
+		#self.b.show()
 
-#layout = UI()
-
-wind = W(parent = mainMayaWindow, name = "skorge main window")
+# create the Skorge UI window
+skorgeUI = W(parent = mainMayaWindow, name = "skorge main window")
 
 # create a widget
-widget = QWidget()
-wind.w.setCentralWidget(widget)
+skorgeWidget = QWidget()
+skorgeUI.w.setCentralWidget(skorgeWidget)
 
-# create a layout
-layout = QVBoxLayout(widget)
+# create a box layout
+layout = QVBoxLayout(skorgeWidget)
 
-foo = B(text = "Hello there", style = buttonStyle)
-noob = B(text = "This iz kewl", style = buttonStyle)
+# create the contained buttons and apply the button stylesheet
+hello = B(text = "Hello there", style = buttonStyle)
+layout.addWidget(hello.b)
+kewl = B(text = "This iz kewl", style = buttonStyle)
+layout.addWidget(kewl.b)
 
-layout.addWidget(foo.b)
-layout.addWidget(noob.b)
-
-wind.w.show()
+# add functionality
+def hello_onClicked(self):
+    print("Hello!")
