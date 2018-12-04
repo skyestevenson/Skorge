@@ -34,8 +34,8 @@ def alert(message):
 def dash():
     cmds.separator(horizontal = 1, height = 5, style = "single")
 # a collapsable frame that contains UI elements
-def frame(inLabel, isCollapsed, inAnn):
-    cmds.frameLayout(label = inLabel, collapsable = True, cl = isCollapsed, ann = inAnn)
+def frame(label, closed = False, note = ""):
+    cmds.frameLayout(label = label, collapsable = True, cl = closed, ann = note)
 # close a frame
 def closeFrame():
     cmds.setParent( '..' )
@@ -60,29 +60,14 @@ def main():
     cmds.iconTextButton(style = "iconOnly", image1 = iconPath + "SkyeTools.png")
     dash()
 
-    # Project Shelf UI
-    frame("QuickShelf", False, "A persistent shelf which stays with your project. Middle mouse drag-and-drop to add items.")
-    shelf()
-    QuickShelf.importShelf()
-    closeFrame()
-    b("Save Shelf", "QuickShelf.exportShelf()", "Save to " + projScripts)
-    closeFrame()
-    dash()
-
-    # QuickSelect UI
-    frame("QuickSelect", True, "Quickly create and access selection sets.")
-    b("Add New", "", "Create QuickSelect set from selection.")
-    closeFrame()
-    dash()
-
     # Mesh Actions UI
-    frame("Mesh Actions", True, "Perform various actions on meshes.")
+    frame("Mesh Actions", False, "Perform various actions on meshes.")
     b("Unite Meshes", "", "Combine and merge meshes.")
     closeFrame()
     dash()
 
     # Mirroring UI
-    frame("Mirroring", True, "Mirror meshes comprehensively.")
+    frame("Mirroring", False, "Mirror meshes comprehensively.")
     cb("Use Object Pivot", "", "", "")
     cb("Make Instance", "", "", "")
     b("Mirror X", "", "")
@@ -92,7 +77,7 @@ def main():
     dash()
 
     # Shading UI
-    frame("Shading", True, "Assign default shader models.")
+    frame("Shading", False, "Assign default shader models.")
     b("Blinn", "", "")
     b("Lambert", "", "")
     closeFrame()
