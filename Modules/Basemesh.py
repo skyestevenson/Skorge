@@ -1,8 +1,7 @@
 import maya.cmds as cmds
 import maya.mel as mel
 
-BMPath = cmds.internalVar(userScriptDir = True) + "Skorge/Meshes/"
+path = cmds.internalVar(userScriptDir = True) + "Skorge/Meshes/"
 
-def makeHuman():
-    BMHumanPath = BMPath + "Basemesh_Human.obj"
-    cmds.file(BMHumanPath, i = True, mergeNamespacesOnClash = True, namespace = ':')
+def human():
+    cmds.file(path + "Basemesh_Human.obj", i = True, mergeNamespacesOnClash = True, namespace = ':')
