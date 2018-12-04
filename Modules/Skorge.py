@@ -30,78 +30,75 @@ reload (Exporter)
 # -------- HELPFUL FUNCTIONS --------
 # alert user function
 def alert(message):
-    sys.stdout.write("Skorge: " + message)
+    sys.stdout.write("ST: " + message)
 
-# -------- PYSIDE UI SETUP BEGINS HERE --------
+# -------- UI FUNCTIONS --------
+# a thin horizontal line separator
+def dash():
+    cmds.separator(horizontal = 1, height = 5, style = "single")
+# a collapsable frame that contains UI elements
+def frame(inLabel, isCollapsed, inAnn):
+    cmds.frameLayout(label = inLabel, collapsable = True, cl = isCollapsed, ann = inAnn)
+# close a frame
+def closeFrame():
+    cmds.setParent( '..' )
+# button UI
+def b(inLabel, inCommand, inAnn):
+    cmds.button(label = inLabel, command = inCommand, ann = inAnn)
+# checkbox UI
+def cb(inLabel, inOnCommand, inOffCommand, inAnn):
+    cmds.checkBox(label = inLabel, onCommand = inOnCommand, offCommand = inOffCommand, ann = inAnn)
+# shelf layout UI
 
-def getMayaWindow():
-	ptr = omui.MQtUtil.mainWindow()
-	if ptr is not None:
-		return wrapInstance(long(ptr), QWidget)
+# -------- MAIN FUNCTION --------
+def main():
+    # -------- MAIN UI --------
+    # set up main UI window
+    window = cmds.window(title = "Skorge 1.0", topLeftCorner = [300, 360], backgroundColor = [0.15, 0.15, 0.15], toolbox = True)
+    cmds.columnLayout(adjustableColumn = True)
 
-mainMayaWindow = getMayaWindow()
+    # Skorge icon
+    cmds.iconTextButton(style = "iconOnly", image1 = iconPath + "SkyeTools.png")
+    dash()
 
-font = QFont("Calibri")
-font.setPointSize(14)
-font.setBold(True)
+    # QuickSelect UI
+    frame("QuickSelect", True, "Quickly create and access selection sets.")
+    b("Add New", "", "Create QuickSelect set from selection.")
+    closeFrame()
+    dash()
 
-def makeStyle(propList):
-	inlineStyle = ""
+    # Mesh Actions UI
+    frame("Mesh Actions", True, "Perform various actions on meshes.")
+    b("Unite Meshes", "", "Combine and merge meshes.")
+    closeFrame()
+    dash()
 
-	for item in propList:
-		inlineStyle += item
+    # Mirroring UI
+    frame("Mirroring", True, "Mirror meshes comprehensively.")
+    cb("Use Object Pivot", "", "", "")
+    cb("Make Instance", "", "", "")
+    b("Mirror X", "", "")
+    b("Mirror Y", "", "")
+    b("Mirror Z", "", "")
+    closeFrame()
+    dash()
 
-	return inlineStyle
+    # Shading UI
+    frame("Shading", True, "Assign default shader models.")
+    b("Blinn", "", "")
+    b("Lambert", "", "")
+    closeFrame()
+    dash()
 
-buttonStyle = makeStyle([
-		"color: rgb(255, 255, 255);",
-		"background-color: rgb(30, 30, 30);",
-		"selection-color: rgb(255, 255, 255);",
-		"selection-background-color: rgb(0, 187, 255);",
-		"border-radius: 10px;",
-		"border-style: outset;",
-		"border-width: 0px;"
-	])
+    # Basemesh UI
+    frame("Basemesh", False, "Create useful basemeshes for reference or to kickstart modeling.")
+    b("Create Human", "Basemesh.makeHuman()", "Create a human basemesh. Default height is 180cm.")
+    closeFrame()
 
-windowStyle = makeStyle([
-		"margin: 5px;"
-	])
+    # Exporter UI
+    frame("Exporter", False, "")
+    b("Export Copy", "Exporter.export()", "Export a copy from the scene origin.")
+    closeFrame()
 
-class W:
-	def __init__(self, parent, name = ""):
-		self.w = QMainWindow(parent)
-		self.w.setObjectName(name)
-		self.w.setMinimumSize(240, 100)
-		self.w.setMaximumWidth(240)
-		self.w.setStyleSheet(windowStyle)
-		self.w.show()
-
-
-class B:
-	def __init__(self, text, style):
-		self.t = text
-
-		self.b = QPushButton(self.t)
-		self.b.setFont(font)
-		self.b.setMinimumSize(240, 60)
-		self.b.setStyleSheet(style)
-		self.b.show()
-
-#layout = UI()
-
-wind = W(parent = mainMayaWindow, name = "skorge main window")
-
-# create a widget
-widget = QWidget()
-wind.w.setCentralWidget(widget)
-
-# create a layout
-layout = QVBoxLayout(widget)
-
-foo = B(text = "Hello there", style = buttonStyle)
-noob = B(text = "This iz kewl", style = buttonStyle)
-
-layout.addWidget(foo.b)
-layout.addWidget(noob.b)
-
-wind.w.show()
+    # show main UI window
+    cmds.showWindow(window)
