@@ -41,11 +41,22 @@ def frame(label, closed = False, note = ""):
 def closeFrame():
     cmds.setParent( '..' )
 # button UI
-def b(inLabel, inCommand, inAnn):
-    cmds.button(label = inLabel, command = inCommand, ann = inAnn)
+def b(label, command, width, ann = ""):
+    if width is None:
+        cmds.button(label = label, command = command, ann = ann)
+    else:
+        cmds.button(label = label, command = command, ann = ann, width = width)
 # checkbox UI
-def cb(inLabel, inOnCommand, inOffCommand, inAnn):
-    cmds.checkBox(label = inLabel, onCommand = inOnCommand, offCommand = inOffCommand, ann = inAnn)
+def cb(label, inOnCommand, inOffCommand, ann):
+    cmds.checkBox(label = label, onCommand = inOnCommand, offCommand = inOffCommand, ann = ann)
+# column button group
+def bg(buttonWidth = 25):
+    cmds.rowColumnLayout(numberOfRows = 1)
+    b(label = "2", command = "print(2)", width = buttonWidth)
+    b(label = "4", command = "print(4)", width = buttonWidth)
+    b(label = "8", command = "print(8)", width = buttonWidth)
+    b(label = "16", command = "print(16)", width = buttonWidth)
+    closeFrame()
 # slider UI
 class IntSlider:
     def __init__(self, label = "", isFloat = False, min = 0, max = 10, increment = 1):
@@ -58,7 +69,12 @@ class IntSlider:
         self.value = cmds.intSliderGrp(self.slider, q = True, v = True)
 
         print(self.value)
-
+# option menu UI
+class Dropdown:
+    def __init__(self, label = "Dropdown Menu"):
+        self.menu = cmds.optionMenuGrp(label = label)
+        cmds.menuItem(label = "Tester")
+        cmds.menuItem(label = "Another")
 
 # -------- MAIN FUNCTION --------
 def main():
@@ -70,22 +86,24 @@ def main():
   cmds.iconTextButton(style = "iconOnly", image1 = iconPath + "SkorgeIcon.png")
   dash()
 
+  # Grid Spacing
   frame(label = "Grid Spacing", closed = False)
   testSlider = IntSlider(min = 4, max = 16, increment = 4)
 
   # Basemesh UI
   frame(label = "Basemesh", closed = False, note = "Create useful basemeshes for reference or to kickstart modeling.")
-  b("Create Human", "from Modules.Basemesh import human; human()", "Create a human basemesh. Default height is 180cm.")
+  meshSelect = Dropdown(label = "Mesh")
+  b(label = "Create Human", command = "from Modules.Basemesh import human; human()", ann = "Create a human basemesh. Default height is 180cm.", width = None)
   closeFrame()
 
   # Exporter UI
   frame(label = "Exporter", closed = False, note = "")
-  b("Export Copy", "print('fuck')", "Export a copy from the scene origin.")
+  b(label = "Export Copy", command = "print('fuck')", ann = "Export a copy from the scene origin.", width = None)
   closeFrame()
 
   # Exporter UI
   frame(label = "Jokes", closed = False, note = "")
-  b("Tell me a joke", "from Modules.Joke import tellJoke; tellJoke()", "")
+  b(label = "Tell me a joke", command = "from Modules.Joke import tellJoke; tellJoke()", ann = "", width = None)
   closeFrame()
 
   # show main UI window
