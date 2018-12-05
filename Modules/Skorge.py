@@ -79,7 +79,7 @@ class Dropdown:
         cmds.menuItem(label = "Human")
         cmds.menuItem(label = "Else")
         closeFrame()
-        b(label = "Create", command = "", ann = "", width = None)
+        b(label = "Create", command = "from Modules.Basemesh import loadMesh; loadMesh('stove')", ann = "", width = None)
 
 # -------- MAIN FUNCTION --------
 def main():

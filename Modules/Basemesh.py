@@ -3,5 +3,11 @@ import maya.mel as mel
 
 path = cmds.internalVar(userScriptDir = True) + "Skorge/Meshes/"
 
-def human():
-    cmds.file(path + "Basemesh_Human.obj", i = True, mergeNamespacesOnClash = True, namespace = ':')
+# dictionary of meshes to be loaded on-demand
+meshes = {
+    "human": "Human.obj",
+    "stove": "Stove.fbx"
+}
+
+def loadMesh(mesh):
+    cmds.file(path + meshes[mesh], i = True, mergeNamespacesOnClash = True, namespace = ':')
