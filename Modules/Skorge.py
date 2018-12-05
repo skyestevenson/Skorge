@@ -79,7 +79,7 @@ class Dropdown:
         cmds.menuItem(label = "Human")
         cmds.menuItem(label = "Else")
         closeFrame()
-        b(label = "Load", command = "", ann = "", width = None)
+        b(label = "Create", command = "", ann = "", width = None)
 
 # -------- MAIN FUNCTION --------
 def main():
