@@ -11,3 +11,5 @@ meshes = {
 
 def loadMesh(mesh):
     cmds.file(path + meshes[mesh], i = True, mergeNamespacesOnClash = True, namespace = ':')
+
+#loadMesh("stove")
