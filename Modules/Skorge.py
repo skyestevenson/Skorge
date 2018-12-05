@@ -27,6 +27,9 @@ import Modules.Joke as Joke
 def alert(message):
     sys.stdout.write("Skorge: " + message)
 
+# -------- UI COLORS --------
+color2 = (.2, .2, .2)
+
 # -------- UI FUNCTIONS --------
 # just text
 def t(label = "Default Text"):
@@ -43,9 +46,9 @@ def closeFrame():
 # button UI
 def b(label, command, width, ann = ""):
     if width is None:
-        cmds.button(label = label, command = command, ann = ann)
+        cmds.button(label = label, command = command, ann = ann, bgc = color2)
     else:
-        cmds.button(label = label, command = command, ann = ann, width = width)
+        cmds.button(label = label, command = command, ann = ann, width = width, bgc = color2)
 # checkbox UI
 def cb(label, inOnCommand, inOffCommand, ann):
     cmds.checkBox(label = label, onCommand = inOnCommand, offCommand = inOffCommand, ann = ann)
@@ -71,10 +74,12 @@ class IntSlider:
         print(self.value)
 # option menu UI
 class Dropdown:
-    def __init__(self, label = "Dropdown Menu"):
-        self.menu = cmds.optionMenuGrp(label = label)
-        cmds.menuItem(label = "Tester")
-        cmds.menuItem(label = "Another")
+    def __init__(self):
+        self.menu = cmds.optionMenu(bgc = color2)
+        cmds.menuItem(label = "Human")
+        cmds.menuItem(label = "Else")
+        closeFrame()
+        b(label = "Load", command = "", ann = "", width = None)
 
 # -------- MAIN FUNCTION --------
 def main():
@@ -92,8 +97,8 @@ def main():
 
   # Basemesh UI
   frame(label = "Basemesh", closed = False, note = "Create useful basemeshes for reference or to kickstart modeling.")
-  meshSelect = Dropdown(label = "Mesh")
-  b(label = "Create Human", command = "from Modules.Basemesh import human; human()", ann = "Create a human basemesh. Default height is 180cm.", width = None)
+  meshSelect = Dropdown()
+  #b(label = "Create Human", command = "from Modules.Basemesh import human; human()", ann = "Create a human basemesh. Default height is 180cm.", width = None)
   closeFrame()
 
   # Exporter UI
