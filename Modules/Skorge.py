@@ -28,6 +28,9 @@ def alert(message):
     sys.stdout.write("Skorge: " + message)
 
 # -------- UI FUNCTIONS --------
+# just text
+def t(label = "Default Text"):
+    cmds.text(label = label, align = "left")
 # a thin horizontal line separator
 def dash():
     cmds.separator(horizontal = 1, height = 5, style = "single")
@@ -43,16 +46,32 @@ def b(inLabel, inCommand, inAnn):
 # checkbox UI
 def cb(inLabel, inOnCommand, inOffCommand, inAnn):
     cmds.checkBox(label = inLabel, onCommand = inOnCommand, offCommand = inOffCommand, ann = inAnn)
+# slider UI
+class IntSlider:
+    def __init__(self, label = "", isFloat = False, min = 0, max = 10, increment = 1):
+        self.value = 4
+        if (label != ""):
+            self.text = t(label)
+        self.slider = cmds.intSliderGrp(cc = self.updateSlider, f = True, cw2 = (25,50), value = self.value, min = min, max = max)
+
+    def updateSlider(self, *_):
+        self.value = cmds.intSliderGrp(self.slider, q = True, v = True)
+
+        print(self.value)
+
 
 # -------- MAIN FUNCTION --------
 def main():
   # set up main UI window
-  window = cmds.window(title = "Skorge 1.0", topLeftCorner = [300, 360], backgroundColor = [0.15, 0.15, 0.15], toolbox = True)
+  window = cmds.window(title = "Skorge 1.0", topLeftCorner = [300, 1000], backgroundColor = [0.15, 0.15, 0.15], toolbox = True)
   cmds.columnLayout(adjustableColumn = True)
 
   # Skorge icon
   cmds.iconTextButton(style = "iconOnly", image1 = iconPath + "SkorgeIcon.png")
   dash()
+
+  frame(label = "Grid Spacing", closed = False)
+  testSlider = IntSlider(min = 4, max = 16, increment = 4)
 
   # Basemesh UI
   frame(label = "Basemesh", closed = False, note = "Create useful basemeshes for reference or to kickstart modeling.")
