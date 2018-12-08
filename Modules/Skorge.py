@@ -78,44 +78,55 @@ class IntSlider:
         print(self.value)
 
 # -------- UTILITY FUNCTIONS --------
-# we need to query the value of the mesh selection dropdown
+# refresh the UI
+def refreshUI(self):
+  cmds.showWindow(window)
+
+  # refresh the Basemesh mesh preview
+  BMSelection = cmds.optionMenu("meshSelectMenu", query = True, value = True)
+  cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/{}.jpg".format(BMSelection), e = True)
+
+# query the value of the Basemesh mesh selection dropdown and load that mesh
+BMSelection = cmds.optionMenu("meshSelectMenu", query = True, value = True)
 def BM_LoadMesh(self):
-  selection = cmds.optionMenu("meshSelectMenu", query = True, value = True)
-  print(selection)
-  Basemesh.loadMesh(selection)
+  BMSelection = cmds.optionMenu("meshSelectMenu", query = True, value = True)
+  Basemesh.loadMesh(BMSelection)
 
 # -------- MAIN FUNCTION --------
 def main():
   # set up main UI window
   window = cmds.window(title = "Skorge 1.0", topLeftCorner = [300, 1000], backgroundColor = [0.15, 0.15, 0.15], toolbox = True)
+  global window
   cmds.columnLayout(adjustableColumn = True)
 
   # Skorge icon
   cmds.iconTextButton(style = "iconOnly", image1 = iconPath + "SkorgeIcon.png")
   dash()
 
-  # Grid Spacing
+  # -------- Grid Spacing UI
   frame(label = "Grid Spacing", closed = False)
   testSlider = IntSlider(min = 4, max = 16, increment = 4)
 
-  # Basemesh UI
-  frame(label = "Basemesh", closed = False, note = "Create useful basemeshes for reference or to kickstart modeling.")
+  # -------- Basemesh UI
+  frame(label = "Mesh Library", closed = False, note = "Load meshes from the Skorge library.")
+  # show an icon displaying the currently selected mesh
+  cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/{}.jpg".format(BMSelection))
   # create a dropdown menu to select the mesh
-  cmds.optionMenu("meshSelectMenu", bgc = color2)
+  cmds.optionMenu("meshSelectMenu", bgc = color2, cc = partial(refreshUI))
   cmds.menuItem(label = "Human")
   cmds.menuItem(label = "Stove")
   closeFrame()
   # add a button for querying the thing
-  b(label = "Create", command = partial(BM_LoadMesh), ann = "", width = None)
+  b(label = "Create", command = partial(BM_LoadMesh), ann = "Load a copy of the selected mesh into the scene.", width = None)
   closeFrame()
 
-  # Exporter UI
+  # -------- Exporter UI
   frame(label = "Exporter", closed = False, note = "")
   b(label = "Export Copy", command = partial(Exporter.export), ann = "Export a copy from the scene origin.", width = None)
   closeFrame()
 
-  # Exporter UI
-  frame(label = "Jokes", closed = False, note = "")
+  # -------- Extras UI
+  frame(label = "Extras", closed = True, note = "")
   b(label = "Tell me a joke", command = partial(Joke.tellJoke), ann = "", width = None)
   closeFrame()
 
