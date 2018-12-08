@@ -1,6 +1,7 @@
 import sys
 import maya.cmds as cmds
 import maya.mel as mel
+from functools import partial
 
 ######## END DEBUGGING BULLSHIT ########
 
@@ -19,8 +20,11 @@ sys.path.append(skorgePath)
 
 # -------- Skorge Modules --------
 import Modules.Basemesh as Basemesh
+reload(Basemesh)
 import Modules.Exporter as Exporter
+reload(Exporter)
 import Modules.Joke as Joke
+reload(Joke)
 
 # -------- HELPFUL FUNCTIONS --------
 # alert user function
@@ -72,14 +76,13 @@ class IntSlider:
         self.value = cmds.intSliderGrp(self.slider, q = True, v = True)
 
         print(self.value)
-# option menu UI
-class Dropdown:
-    def __init__(self):
-        self.menu = cmds.optionMenu(bgc = color2)
-        cmds.menuItem(label = "Human")
-        cmds.menuItem(label = "Else")
-        closeFrame()
-        b(label = "Create", command = "from Modules.Basemesh import loadMesh; loadMesh('stove')", ann = "", width = None)
+
+# -------- UTILITY FUNCTIONS --------
+# we need to query the value of the mesh selection dropdown
+def BM_LoadMesh(self):
+  selection = cmds.optionMenu("meshSelectMenu", query = True, value = True)
+  print(selection)
+  Basemesh.loadMesh(selection)
 
 # -------- MAIN FUNCTION --------
 def main():
@@ -97,18 +100,23 @@ def main():
 
   # Basemesh UI
   frame(label = "Basemesh", closed = False, note = "Create useful basemeshes for reference or to kickstart modeling.")
-  meshSelect = Dropdown()
-  #b(label = "Create Human", command = "from Modules.Basemesh import human; human()", ann = "Create a human basemesh. Default height is 180cm.", width = None)
+  # create a dropdown menu to select the mesh
+  cmds.optionMenu("meshSelectMenu", bgc = color2)
+  cmds.menuItem(label = "Human")
+  cmds.menuItem(label = "Stove")
+  closeFrame()
+  # add a button for querying the thing
+  b(label = "Create", command = partial(BM_LoadMesh), ann = "", width = None)
   closeFrame()
 
   # Exporter UI
   frame(label = "Exporter", closed = False, note = "")
-  b(label = "Export Copy", command = "print('fuck')", ann = "Export a copy from the scene origin.", width = None)
+  b(label = "Export Copy", command = partial(Exporter.export), ann = "Export a copy from the scene origin.", width = None)
   closeFrame()
 
   # Exporter UI
   frame(label = "Jokes", closed = False, note = "")
-  b(label = "Tell me a joke", command = "from Modules.Joke import tellJoke; tellJoke()", ann = "", width = None)
+  b(label = "Tell me a joke", command = partial(Joke.tellJoke), ann = "", width = None)
   closeFrame()
 
   # show main UI window

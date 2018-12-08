@@ -5,8 +5,8 @@ path = cmds.internalVar(userScriptDir = True) + "Skorge/Meshes/"
 
 # dictionary of meshes to be loaded on-demand
 meshes = {
-    "human": "Human.obj",
-    "stove": "Stove.fbx"
+    "Human": "Human.obj",
+    "Stove": "Stove.obj"
 }
 
 def loadMesh(mesh):
