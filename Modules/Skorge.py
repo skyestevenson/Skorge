@@ -29,7 +29,7 @@ reload(Joke)
 # -------- HELPFUL FUNCTIONS --------
 # alert user function
 def alert(message):
-    sys.stdout.write("Skorge: " + message)
+    sys.stdout.write("Skorge says: " + message)
 
 # -------- UI COLORS --------
 color2 = (.2, .2, .2)
@@ -56,14 +56,6 @@ def b(label, command, width, ann = ""):
 # checkbox UI
 def cb(label, inOnCommand, inOffCommand, ann):
     cmds.checkBox(label = label, onCommand = inOnCommand, offCommand = inOffCommand, ann = ann)
-# column button group
-def bg(buttonWidth = 25):
-    cmds.rowColumnLayout(numberOfRows = 1)
-    b(label = "2", command = "print(2)", width = buttonWidth)
-    b(label = "4", command = "print(4)", width = buttonWidth)
-    b(label = "8", command = "print(8)", width = buttonWidth)
-    b(label = "16", command = "print(16)", width = buttonWidth)
-    closeFrame()
 # slider UI
 class IntSlider:
     def __init__(self, label = "", isFloat = False, min = 0, max = 10, increment = 1):
@@ -106,6 +98,16 @@ def main():
   # -------- Grid Spacing UI
   frame(label = "Grid Spacing", closed = False)
   testSlider = IntSlider(min = 4, max = 16, increment = 4)
+
+  # -------- Quick Collision UI
+  frame(label = "Quick Collision", closed = False, note = "Create properly named collision primitives.")
+  cmds.rowColumnLayout(numberOfRows = 2)
+  QBWidth = 64
+  b(label = "Box", command = "", width = QBWidth)
+  b(label = "Capsule", command = "", width = QBWidth)
+  b(label = "Sphere", command = "", width = QBWidth)
+  b(label = "Convex", command = "", width = QBWidth)
+  closeFrame()
 
   # -------- Basemesh UI
   frame(label = "Mesh Library", closed = False, note = "Load meshes from the Skorge library.")
