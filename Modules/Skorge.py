@@ -72,22 +72,23 @@ class IntSlider:
 # -------- UTILITY FUNCTIONS --------
 # refresh the UI
 def refreshUI(self):
-  cmds.showWindow("skorgeWindow")
+  cmds.showWindow(window)
 
   # refresh the Basemesh mesh preview
-  #BMSelection = cmds.optionMenu("meshSelectMenu", query = True, value = True)
-  #cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/{}.jpg".format(BMSelection), e = True)
+  BMSelection = cmds.optionMenu("meshSelectMenu", query = True, value = True)
+  cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/{}.jpg".format(BMSelection), e = True)
 
 # query the value of the Basemesh mesh selection dropdown and load that mesh
-#BMSelection = cmds.optionMenu("meshSelectMenu", query = True, value = True)
-#def BM_LoadMesh(self):
-#  BMSelection = cmds.optionMenu("meshSelectMenu", query = True, value = True)
-#  Basemesh.loadMesh(BMSelection)
+BMSelection = cmds.optionMenu("meshSelectMenu", query = True, value = True)
+def BM_LoadMesh(self):
+  BMSelection = cmds.optionMenu("meshSelectMenu", query = True, value = True)
+  Basemesh.loadMesh(BMSelection)
 
 # -------- MAIN FUNCTION --------
 def main():
   # set up main UI window
   window = cmds.window(title = "Skorge 1.0", topLeftCorner = [300, 1000], backgroundColor = [0.15, 0.15, 0.15], toolbox = True)
+  global window
   cmds.columnLayout(adjustableColumn = True)
 
   # Skorge icon
@@ -111,14 +112,14 @@ def main():
   # -------- Basemesh UI
   frame(label = "Mesh Library", closed = False, note = "Load meshes from the Skorge library.")
   # show an icon displaying the currently selected mesh
-  #cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/{}.jpg".format(BMSelection))
+  cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/{}.jpg".format(BMSelection))
   # create a dropdown menu to select the mesh
   cmds.optionMenu("meshSelectMenu", bgc = color2, cc = partial(refreshUI))
   cmds.menuItem(label = "Human")
   cmds.menuItem(label = "Stove")
   closeFrame()
   # add a button for querying the thing
-  b(label = "Create", command = "", ann = "Load a copy of the selected mesh into the scene.", width = None)
+  b(label = "Create", command = partial(BM_LoadMesh), ann = "Load a copy of the selected mesh into the scene.", width = None)
   closeFrame()
 
   # -------- Exporter UI

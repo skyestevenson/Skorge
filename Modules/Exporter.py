@@ -1,6 +1,6 @@
+import sys
 import maya.cmds as cmds
 import maya.mel as mel
-import sys
 
 # export as copy
 def export(self):
