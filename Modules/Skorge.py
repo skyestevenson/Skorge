@@ -69,68 +69,70 @@ class IntSlider:
 
         print(self.value)
 
-# -------- UTILITY FUNCTIONS --------
-# refresh the UI
-def refreshUI(self):
-  cmds.showWindow(window)
+class GUI:
+    # -------- MAIN FUNCTION --------
+    def __init__(self):
+        # set up main UI window
+        self.window = cmds.window(title = "Skorge 1.0", topLeftCorner = [300, 1000], backgroundColor = [0.15, 0.15, 0.15], toolbox = True)
+        cmds.columnLayout(adjustableColumn = True)
 
-  # refresh the Basemesh mesh preview
-  BMSelection = cmds.optionMenu("meshSelectMenu", query = True, value = True)
-  cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/{}.jpg".format(BMSelection), e = True)
+        # Skorge icon
+        cmds.iconTextButton(style = "iconOnly", image1 = iconPath + "SkorgeIcon.png")
+        dash()
 
-# query the value of the Basemesh mesh selection dropdown and load that mesh
-BMSelection = cmds.optionMenu("meshSelectMenu", query = True, value = True)
-def BM_LoadMesh(self):
-  BMSelection = cmds.optionMenu("meshSelectMenu", query = True, value = True)
-  Basemesh.loadMesh(BMSelection)
+        # -------- Grid Spacing UI
+        frame(label = "Grid Spacing", closed = False)
+        self.testSlider = IntSlider(min = 4, max = 16, increment = 4)
 
-# -------- MAIN FUNCTION --------
-def main():
-  # set up main UI window
-  window = cmds.window(title = "Skorge 1.0", topLeftCorner = [300, 1000], backgroundColor = [0.15, 0.15, 0.15], toolbox = True)
-  global window
-  cmds.columnLayout(adjustableColumn = True)
+        # -------- Quick Collision UI
+        frame(label = "Quick Collision", closed = False, note = "Create properly named collision primitives.")
+        cmds.rowColumnLayout(numberOfRows = 2)
+        self.QBWidth = 64
+        b(label = "Box", command = "", width = self.QBWidth)
+        b(label = "Capsule", command = "", width = self.QBWidth)
+        b(label = "Sphere", command = "", width = self.QBWidth)
+        b(label = "Convex", command = "", width = self.QBWidth)
+        closeFrame()
 
-  # Skorge icon
-  cmds.iconTextButton(style = "iconOnly", image1 = iconPath + "SkorgeIcon.png")
-  dash()
+        # -------- Basemesh UI
+        frame(label = "Mesh Library", closed = False, note = "Load meshes from the Skorge library.")
+        # show an icon displaying the currently selected mesh
+        # query the value of the Basemesh mesh selection dropdown and load that mesh
 
-  # -------- Grid Spacing UI
-  frame(label = "Grid Spacing", closed = False)
-  testSlider = IntSlider(min = 4, max = 16, increment = 4)
+        cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/Human.jpg")
+        # create a dropdown menu to select the mesh
+        self.meshSelectMenu = cmds.optionMenu(bgc = color2, cc = partial(self.refreshUI))
+        cmds.menuItem(label = "Human")
+        cmds.menuItem(label = "Stove")
+        closeFrame()
+        # add a button for querying the thing
+        b(label = "Create", command = partial(self.BM_LoadMesh), ann = "Load a copy of the selected mesh into the scene.", width = None)
+        closeFrame()
 
-  # -------- Quick Collision UI
-  frame(label = "Quick Collision", closed = False, note = "Create properly named collision primitives.")
-  cmds.rowColumnLayout(numberOfRows = 2)
-  QBWidth = 64
-  b(label = "Box", command = "", width = QBWidth)
-  b(label = "Capsule", command = "", width = QBWidth)
-  b(label = "Sphere", command = "", width = QBWidth)
-  b(label = "Convex", command = "", width = QBWidth)
-  closeFrame()
+        # -------- Exporter UI
+        frame(label = "Exporter", closed = False, note = "")
+        b(label = "Export Copy", command = partial(Exporter.export), ann = "Export a copy from the scene origin.", width = None)
+        closeFrame()
 
-  # -------- Basemesh UI
-  frame(label = "Mesh Library", closed = False, note = "Load meshes from the Skorge library.")
-  # show an icon displaying the currently selected mesh
-  cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/{}.jpg".format(BMSelection))
-  # create a dropdown menu to select the mesh
-  cmds.optionMenu("meshSelectMenu", bgc = color2, cc = partial(refreshUI))
-  cmds.menuItem(label = "Human")
-  cmds.menuItem(label = "Stove")
-  closeFrame()
-  # add a button for querying the thing
-  b(label = "Create", command = partial(BM_LoadMesh), ann = "Load a copy of the selected mesh into the scene.", width = None)
-  closeFrame()
+        # -------- Extras UI
+        frame(label = "Extras", closed = True, note = "")
+        b(label = "Tell me a joke", command = partial(Joke.tellJoke), ann = "", width = None)
+        closeFrame()
 
-  # -------- Exporter UI
-  frame(label = "Exporter", closed = False, note = "")
-  b(label = "Export Copy", command = partial(Exporter.export), ann = "Export a copy from the scene origin.", width = None)
-  closeFrame()
+        # show main UI window
+        cmds.showWindow(self.window)
+        
+    # -------- UTILITY FUNCTIONS --------
+    # refresh the UI
+    def refreshUI(self):
+        cmds.showWindow(window)
 
-  # -------- Extras UI
-  frame(label = "Extras", closed = True, note = "")
-  b(label = "Tell me a joke", command = partial(Joke.tellJoke), ann = "", width = None)
-  closeFrame()
+        # refresh the Basemesh mesh preview
+        BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
+        cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/{}.jpg".format(BMSelection), e = True)
 
-  # show main UI window
-  cmds.showWindow(window)
+    def BM_LoadMesh(self):
+        BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
+        Basemesh.loadMesh(BMSelection)
+    
+x = GUI()
