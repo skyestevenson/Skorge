@@ -124,15 +124,18 @@ class GUI:
         
     # -------- UTILITY FUNCTIONS --------
     # refresh the UI
-    def refreshUI(self):
+    # NOTE: the use of "other" here is because, since these are classed functions being called via partial
+    # ...as a result, there are two implicit "self" arguments that have to be passed
+    def refreshUI(self, other):
         cmds.showWindow(window)
 
         # refresh the Basemesh mesh preview
         BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
         cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/{}.jpg".format(BMSelection), e = True)
 
-    def BM_LoadMesh(self):
+    def BM_LoadMesh(self, other):
         BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
+        print(BMSelection)
         Basemesh.loadMesh(BMSelection)
     
 x = GUI()
