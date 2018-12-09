@@ -54,8 +54,8 @@ def b(label, command, width, ann = ""):
     else:
         cmds.button(label = label, command = command, ann = ann, width = width, bgc = color2)
 # checkbox UI
-def cb(label, inOnCommand, inOffCommand, ann):
-    cmds.checkBox(label = label, onCommand = inOnCommand, offCommand = inOffCommand, ann = ann)
+def cb(label, onCommand, offCommand, ann, value = True):
+    cmds.checkBox(label = label, onCommand = onCommand, offCommand = offCommand, ann = ann, value = value)
 # slider UI
 class IntSlider:
     def __init__(self, label = "", isFloat = False, min = 0, max = 10, increment = 1):
@@ -86,6 +86,8 @@ class GUI:
 
         # -------- Quick Collision UI
         frame(label = "Quick Collision", closed = False, note = "Create properly named collision primitives.")
+        cmds.textField()
+        b(label = "Get mesh name", command = partial(self.BM_LoadMesh), ann = "", width = None)
         cmds.rowColumnLayout(numberOfRows = 2)
         self.QBWidth = 64
         b(label = "Box", command = "", width = self.QBWidth)
@@ -106,11 +108,14 @@ class GUI:
         cmds.menuItem(label = "Stove")
         closeFrame()
         # add a button for querying the thing
-        b(label = "Create", command = partial(self.BM_LoadMesh), ann = "Load a copy of the selected mesh into the scene.", width = None)
+        b(label = "Load selected", command = partial(self.BM_LoadMesh), ann = "Load a copy of the selected mesh into the scene.", width = None)
+        b(label = "Add to library", command = partial(self.BM_LoadMesh), ann = "", width = None)
         closeFrame()
 
         # -------- Exporter UI
         frame(label = "Exporter", closed = False, note = "")
+        cb(label = "Export from origin", onCommand = "", offCommand = "", ann = "")
+        cb(label = "Use centimeter scale", onCommand = "", offCommand = "", ann = "Assumes you're working in centimeter scale.")
         b(label = "Export Copy", command = partial(Exporter.export), ann = "Export a copy from the scene origin.", width = None)
         closeFrame()
 
@@ -127,15 +132,15 @@ class GUI:
     # NOTE: the use of "other" here is because, since these are classed functions being called via partial
     # ...as a result, there are two implicit "self" arguments that have to be passed
     def refreshUI(self, other):
-        cmds.showWindow(window)
+        cmds.showWindow(self.window)
 
         # refresh the Basemesh mesh preview
-        BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
-        cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/{}.jpg".format(BMSelection), e = True)
+        self.BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
+        cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/{}.jpg".format(self.BMSelection), e = True)
 
     def BM_LoadMesh(self, other):
-        BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
-        print(BMSelection)
-        Basemesh.loadMesh(BMSelection)
+        self.BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
+        print(self.BMSelection)
+        Basemesh.loadMesh(self.BMSelection)
     
 x = GUI()
