@@ -104,8 +104,7 @@ class GUI:
         cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/Human.jpg")
         # create a dropdown menu to select the mesh
         self.meshSelectMenu = cmds.optionMenu(bgc = color2, cc = partial(self.refreshUI))
-        cmds.menuItem(label = "Human")
-        cmds.menuItem(label = "Stove")
+        Basemesh.populateMenu()
         closeFrame()
         # add a button for querying the thing
         b(label = "Load selected", command = partial(self.BM_LoadMesh), ann = "Load a copy of the selected mesh into the scene.", width = None)
