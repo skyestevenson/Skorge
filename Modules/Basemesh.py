@@ -8,11 +8,12 @@ path = cmds.internalVar(userScriptDir = True) + "Skorge/Meshes/"
 meshes = {}
 
 # load in only OBJ meshes automatically from the folder
-for fileName in os.listdir(path):
-    if fileName.endswith(".obj"):
-    	# add that file to the meshes dictionary
-    	simpleName = fileName.replace(".obj", "")
-    	meshes[simpleName] = fileName
+def getMeshes():
+	for fileName in os.listdir(path):
+	    if fileName.endswith(".obj"):
+	    	# add that file to the meshes dictionary
+	    	simpleName = fileName.replace(".obj", "")
+	    	meshes[simpleName] = fileName
 
 def populateMenu():
 	for mesh in meshes:
@@ -21,4 +22,4 @@ def populateMenu():
 def loadMesh(mesh):
     cmds.file(path + meshes[mesh], i = True, mergeNamespacesOnClash = True, namespace = ':')
 
-#loadMesh("stove")
+getMeshes()

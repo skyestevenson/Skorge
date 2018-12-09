@@ -104,11 +104,11 @@ class GUI:
         cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/Human.jpg")
         # create a dropdown menu to select the mesh
         self.meshSelectMenu = cmds.optionMenu(bgc = color2, cc = partial(self.refreshUI))
-        Basemesh.populateMenu()
+        self.BMMenu = Basemesh.populateMenu()
         closeFrame()
         # add a button for querying the thing
         b(label = "Load selected", command = partial(self.BM_LoadMesh), ann = "Load a copy of the selected mesh into the scene.", width = None)
-        b(label = "Add to library", command = partial(self.BM_LoadMesh), ann = "", width = None)
+        b(label = "Add to library", command = "from Modules.Exporter import *; basemeshExport(None); from Modules.Basemesh import *; getMeshes(); populateMenu()", ann = "", width = None)
         closeFrame()
 
         # -------- Exporter UI
@@ -141,5 +141,8 @@ class GUI:
         self.BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
         print(self.BMSelection)
         Basemesh.loadMesh(self.BMSelection)
+
+    def refreshBMMenu(self):
+        self.BMMenu = Basemesh.populateMenu()
     
 x = GUI()
