@@ -193,4 +193,5 @@ class GUI:
         Colliders.createCollider(colliderType = colliderType, meshName = meshName)
     
 # instance the UI window
-SkorgeUI = GUI()
+def main():
+    SkorgeUI = GUI()
