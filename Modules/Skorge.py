@@ -83,8 +83,13 @@ class GUI:
         cmds.iconTextButton(style = "iconOnly", image1 = iconPath + "SkorgeIcon.png")
         dash()
 
+        # Project notes UI
+        frame(label = "Notepad", closed = False)
+        b(label = "Open project notes", command = partial(self.PNOpen), width = None)
+        closeFrame()
+
         # -------- Grid Spacing UI
-        frame(label = "Grid Spacing", closed = False)
+        frame(label = "Grid Spacing", closed = True)
         self.testSlider = IntSlider(min = 4, max = 16, increment = 4)
         closeFrame()
 
@@ -143,6 +148,14 @@ class GUI:
         # refresh the Basemesh mesh preview
         self.BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
         self.BMRefreshImage()
+
+    def PNOpen(self, other):
+        self.PNNoteWidth = 250
+        self.PNNoteHeight = 300
+        self.PNNoteWindow = cmds.window(title = "Project notes", topLeftCorner = [350, 1500], backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.PNNoteWidth, h = self.PNNoteHeight, sizeable = True)
+        cmds.columnLayout(adjustableColumn = True)
+        # show notepad window
+        cmds.showWindow(self.PNNoteWindow)
 
     def EXExport(self, other):
         origin = cmds.checkBox(self.originCB, query = True, value = True)
