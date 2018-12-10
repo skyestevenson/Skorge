@@ -4,7 +4,7 @@ import sys
 
 # alert user function
 def alert(message):
-    sys.stdout.write("Skorge says: " + message)
+    sys.stdout.write(message)
 
 def createCollider(colliderType, meshName):
 	if (meshName != ""):

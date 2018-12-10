@@ -30,8 +30,8 @@ reload(Colliders)
 
 # -------- HELPFUL FUNCTIONS --------
 # alert user function
-def alert(message):
-    sys.stdout.write("Skorge says: " + message)
+def alert(self, message):
+    sys.stdout.write(message)
 
 # -------- UI COLORS --------
 color2 = (.2, .2, .2)
@@ -154,8 +154,14 @@ class GUI:
         self.PNNoteHeight = 300
         self.PNNoteWindow = cmds.window(title = "Project notes", topLeftCorner = [350, 1500], backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.PNNoteWidth, h = self.PNNoteHeight, sizeable = True)
         cmds.columnLayout(adjustableColumn = True)
+        # add textbox
+        self.PNNoteField = cmds.scrollField(bgc = color2, height = self.PNNoteHeight, cc = partial(self.PNSaved))
         # show notepad window
         cmds.showWindow(self.PNNoteWindow)
+
+    def PNSaved(self, other):
+        import datetime
+        alert(None, "Project notes saved, {}".format(datetime.datetime.now().strftime("%I:%M:%S %p")))
 
     def EXExport(self, other):
         origin = cmds.checkBox(self.originCB, query = True, value = True)
