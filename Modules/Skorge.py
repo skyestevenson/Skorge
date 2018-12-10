@@ -75,7 +75,8 @@ class GUI:
     # -------- MAIN FUNCTION --------
     def __init__(self):
         # set up main UI window
-        self.window = cmds.window(title = "Skorge Alpha", topLeftCorner = [350, 1500], backgroundColor = [0.15, 0.15, 0.15], toolbox = True)
+        self.UIWidth = 128
+        self.window = cmds.window(title = "Skorge Alpha", topLeftCorner = [350, 1500], backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.UIWidth, rtf = False)
         cmds.columnLayout(adjustableColumn = True)
 
         # Skorge icon
@@ -108,7 +109,7 @@ class GUI:
         # -------- Basemesh UI
         frame(label = "Mesh Library", closed = False, note = "Load meshes from the Skorge library.")
         # show an icon displaying the currently selected mesh
-        cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/Human.jpg")
+        cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/Human.jpg", height = self.UIWidth)
         # create a dropdown menu to select the mesh
         self.meshSelectMenu = cmds.optionMenu(bgc = color2, cc = partial(self.refreshUI))
         self.BMMenu = self.BMPopulateMenu()
@@ -163,9 +164,9 @@ class GUI:
         iconFile = iconPath + "BMIcons/{}.jpg".format(self.BMSelection)
         import os.path
         if (os.path.isfile(iconFile)):
-            cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconFile, e = True)
+            cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconFile, e = True, w = self.UIWidth)
         else:
-            cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/BMDefault.jpg", e = True)
+            cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/BMDefault.jpg", e = True, w = self.UIWidth)
 
     def BMPopulateMenu(self):
         self.meshArray = Basemesh.populateMenu()

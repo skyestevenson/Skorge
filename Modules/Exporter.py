@@ -23,4 +23,4 @@ def basemeshExport():
 	if prompt == "OK":
 		meshName = cmds.promptDialog(query = True, text = True)
 
-	cmds.file(BMPath + meshName + ".obj", force = True, options = "groups=1;ptgroups=1;materials=0;smoothing=1;normals=1", typ = "OBJexport", pr = True, es = True)
+	cmds.file(BMPath + meshName + ".obj", force = True, options = "groups=0;ptgroups=0;materials=0;smoothing=1;normals=1", typ = "OBJexport", pr = True, es = True)
