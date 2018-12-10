@@ -75,7 +75,7 @@ class GUI:
     # -------- MAIN FUNCTION --------
     def __init__(self):
         # set up main UI window
-        self.window = cmds.window(title = "Skorge 1.0", topLeftCorner = [300, 1000], backgroundColor = [0.15, 0.15, 0.15], toolbox = True)
+        self.window = cmds.window(title = "Skorge Alpha", topLeftCorner = [350, 1500], backgroundColor = [0.15, 0.15, 0.15], toolbox = True)
         cmds.columnLayout(adjustableColumn = True)
 
         # Skorge icon
@@ -85,6 +85,7 @@ class GUI:
         # -------- Grid Spacing UI
         frame(label = "Grid Spacing", closed = False)
         self.testSlider = IntSlider(min = 4, max = 16, increment = 4)
+        closeFrame()
 
         # -------- Quick Collision UI
         frame(label = "Quick Collision", closed = False, note = "Create properly named collision primitives.")
@@ -114,9 +115,9 @@ class GUI:
 
         # -------- Exporter UI
         frame(label = "Exporter", closed = False, note = "")
-        cb(label = "Export from origin", onCommand = "", offCommand = "", ann = "")
-        cb(label = "Use centimeter scale", onCommand = "", offCommand = "", ann = "Assumes you're working in centimeter scale.")
-        b(label = "Export Copy", command = partial(Exporter.export), ann = "Export a copy from the scene origin.", width = None)
+        self.originCB = cmds.checkBox(label = "Export from origin", ann = "Exports the mesh from the world space origin.", value = True)
+        self.centimeterCB = cmds.checkBox(label = "Use centimeter scale", ann = "Scales the mesh up 100 times.", value = False)
+        b(label = "Export Copy", command = partial(self.EXExport), ann = "Export a copy from the scene origin.", width = None)
         closeFrame()
 
         # -------- Extras UI
@@ -133,10 +134,16 @@ class GUI:
     # ...as a result, there are two implicit "self" arguments that have to be passed
     def refreshUI(self, other):
         cmds.showWindow(self.window)
-
         # refresh the Basemesh mesh preview
         self.BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
         self.BMRefreshImage()
+
+    def EXExport(self, other):
+        origin = cmds.checkBox(self.originCB, query = True, value = True)
+        centimeter = cmds.checkBox(self.centimeterCB, query = True, value = True)
+        print(origin)
+        print(centimeter)
+        Exporter.export(origin = origin, centimeter = centimeter)
 
     def BM_LoadMesh(self, other):
         self.BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
@@ -179,4 +186,5 @@ class GUI:
         meshName = cmds.textField(self.CLMeshNameField, q = True, text = True)
         Colliders.createCollider(colliderType = colliderType, meshName = meshName)
     
-x = GUI()
+# instance the UI window
+SkorgeUI = GUI()

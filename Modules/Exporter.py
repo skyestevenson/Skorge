@@ -3,9 +3,12 @@ import maya.cmds as cmds
 import maya.mel as mel
 
 # export as copy
-def export(self):
+def export(origin, centimeter):
     cmds.duplicate(rr = True)
-    cmds.move(0, 0, 0, rpr = True)
+    if origin:
+    	cmds.move(0, 0, 0, rpr = True)
+    if centimeter:
+    	cmds.scale(100, 100, 100)
     cmds.ExportSelection()
     cmds.delete()
 

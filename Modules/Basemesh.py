@@ -19,6 +19,7 @@ def populateMenu():
 	meshArray = []
 	for mesh in meshes:
 		meshArray.append(mesh)
+	meshArray.sort()
 	return meshArray
 
 def loadMesh(mesh):
