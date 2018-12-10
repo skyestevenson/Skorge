@@ -16,8 +16,10 @@ def getMeshes():
 	    	meshes[simpleName] = fileName
 
 def populateMenu():
+	meshArray = []
 	for mesh in meshes:
-		cmds.menuItem(label = mesh)
+		meshArray.append(mesh)
+	return meshArray
 
 def loadMesh(mesh):
     cmds.file(path + meshes[mesh], i = True, mergeNamespacesOnClash = True, namespace = ':')

@@ -101,12 +101,11 @@ class GUI:
         # -------- Basemesh UI
         frame(label = "Mesh Library", closed = False, note = "Load meshes from the Skorge library.")
         # show an icon displaying the currently selected mesh
-        # query the value of the Basemesh mesh selection dropdown and load that mesh
-
         cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/Human.jpg")
         # create a dropdown menu to select the mesh
         self.meshSelectMenu = cmds.optionMenu(bgc = color2, cc = partial(self.refreshUI))
-        self.BMMenu = Basemesh.populateMenu()
+        self.BMMenu = self.BMPopulateMenu()
+        self.BMRefreshImage()
         closeFrame()
         # add a button for querying the thing
         b(label = "Load selected", command = partial(self.BM_LoadMesh), ann = "Load a copy of the selected mesh into the scene.", width = None)
@@ -156,12 +155,17 @@ class GUI:
         else:
             cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/BMDefault.jpg", e = True)
 
+    def BMPopulateMenu(self):
+        self.meshArray = Basemesh.populateMenu()
+        for mesh in self.meshArray:
+            cmds.menuItem(label = mesh, p = self.meshSelectMenu)
+
     def BMAddToLibrary(self, other):
         Exporter.basemeshExport()
         Basemesh.getMeshes()
         self.BMMenuItems = cmds.optionMenu(self.meshSelectMenu, q=True, itemListLong=True)
         cmds.deleteUI(self.BMMenuItems)
-        Basemesh.populateMenu()
+        self.BMPopulateMenu()
         self.BMRefreshImage()
         self.refreshUI(None)
 
