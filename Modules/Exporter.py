@@ -12,7 +12,7 @@ def export(self):
 BMPath = cmds.internalVar(userScriptDir = True) + "Skorge/Meshes/"
 
 # export an OBJ directly to the Basemesh library
-def basemeshExport(self):
+def basemeshExport():
 	# ask user how many instances to make
 	prompt = cmds.promptDialog(title = "Skorge Mesh Library", message = "Mesh name", button = ["OK", "Cancel"], defaultButton = "OK", cancelButton = "Cancel", dismissString = "Eh, never mind.")
 

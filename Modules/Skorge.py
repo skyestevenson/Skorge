@@ -108,7 +108,7 @@ class GUI:
         closeFrame()
         # add a button for querying the thing
         b(label = "Load selected", command = partial(self.BM_LoadMesh), ann = "Load a copy of the selected mesh into the scene.", width = None)
-        b(label = "Add to library", command = "from Modules.Exporter import *; basemeshExport(None); from Modules.Basemesh import *; getMeshes()", ann = "", width = None)
+        b(label = "Add to library", command = partial(self.BMAddToLibrary), ann = "", width = None)
         closeFrame()
 
         # -------- Exporter UI
@@ -146,11 +146,21 @@ class GUI:
         self.BMMenu = Basemesh.populateMenu()
 
     def BMRefreshImage(self):
+        self.BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
         iconFile = iconPath + "BMIcons/{}.jpg".format(self.BMSelection)
         import os.path
         if (os.path.isfile(iconFile)):
             cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconFile, e = True)
         else:
             cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/BMDefault.jpg", e = True)
+
+    def BMAddToLibrary(self, other):
+        Exporter.basemeshExport()
+        Basemesh.getMeshes()
+        self.BMMenuItems = cmds.optionMenu(self.meshSelectMenu, q=True, itemListLong=True)
+        cmds.deleteUI(self.BMMenuItems)
+        Basemesh.populateMenu()
+        self.BMRefreshImage()
+        self.refreshUI(None)
     
 x = GUI()
