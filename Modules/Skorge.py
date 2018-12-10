@@ -97,6 +97,7 @@ class GUI:
         b(label = "Sphere", command = partial(self.CLCreateCollider, colliderType = "sphere"), width = self.QBWidth)
         b(label = "Convex", command = partial(self.CLCreateCollider, colliderType = "convex"), width = self.QBWidth)
         closeFrame()
+        closeFrame()
 
         # -------- Basemesh UI
         frame(label = "Mesh Library", closed = False, note = "Load meshes from the Skorge library.")
@@ -106,7 +107,6 @@ class GUI:
         self.meshSelectMenu = cmds.optionMenu(bgc = color2, cc = partial(self.refreshUI))
         self.BMMenu = self.BMPopulateMenu()
         self.BMRefreshImage()
-        closeFrame()
         # add a button for querying the thing
         b(label = "Load selected", command = partial(self.BM_LoadMesh), ann = "Load a copy of the selected mesh into the scene.", width = None)
         b(label = "Add to library", command = partial(self.BMAddToLibrary), ann = "", width = None)
