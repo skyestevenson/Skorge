@@ -87,6 +87,11 @@ class GUI:
         self.testSlider = IntSlider(min = 4, max = 16, increment = 4)
         closeFrame()
 
+        # -------- UVing UI
+        frame(label = "UV Toolbox", closed = False, note = "")
+        b(label = "Cut hard edges", command = "mel.eval('polyUVHardEdgesAutoSeams 1;')", width = None)
+        closeFrame()
+
         # -------- Quick Collision UI
         frame(label = "Quick Collision", closed = False, note = "Create properly named collision primitives.")
         self.CLMeshNameField = cmds.textField()
@@ -116,7 +121,7 @@ class GUI:
         # -------- Exporter UI
         frame(label = "Exporter", closed = False, note = "")
         self.originCB = cmds.checkBox(label = "Export from origin", ann = "Exports the mesh from the world space origin.", value = True)
-        self.centimeterCB = cmds.checkBox(label = "Use centimeter scale", ann = "Scales the mesh up 100 times.", value = False)
+        self.centimeterCB = cmds.checkBox(label = "Use centimeter scale", ann = "Scales the mesh up 100 times.", value = True)
         b(label = "Export Copy", command = partial(self.EXExport), ann = "Export a copy from the scene origin.", width = None)
         closeFrame()
 
