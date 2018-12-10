@@ -25,6 +25,8 @@ import Modules.Exporter as Exporter
 reload(Exporter)
 import Modules.Joke as Joke
 reload(Joke)
+import Modules.Colliders as Colliders
+reload(Colliders)
 
 # -------- HELPFUL FUNCTIONS --------
 # alert user function
@@ -86,14 +88,14 @@ class GUI:
 
         # -------- Quick Collision UI
         frame(label = "Quick Collision", closed = False, note = "Create properly named collision primitives.")
-        cmds.textField()
-        b(label = "Get mesh name", command = partial(self.BM_LoadMesh), ann = "", width = None)
+        self.CLMeshNameField = cmds.textField()
+        b(label = "Get mesh name", command = partial(self.CLGetName), ann = "", width = None)
         cmds.rowColumnLayout(numberOfRows = 2)
         self.QBWidth = 64
-        b(label = "Box", command = "", width = self.QBWidth)
-        b(label = "Capsule", command = "", width = self.QBWidth)
-        b(label = "Sphere", command = "", width = self.QBWidth)
-        b(label = "Convex", command = "", width = self.QBWidth)
+        b(label = "Box", command = partial(self.CLCreateCollider, colliderType = "box"), width = self.QBWidth)
+        b(label = "Capsule", command = partial(self.CLCreateCollider, colliderType = "capsule"), width = self.QBWidth)
+        b(label = "Sphere", command = partial(self.CLCreateCollider, colliderType = "sphere"), width = self.QBWidth)
+        b(label = "Convex", command = partial(self.CLCreateCollider, colliderType = "convex"), width = self.QBWidth)
         closeFrame()
 
         # -------- Basemesh UI
@@ -162,5 +164,15 @@ class GUI:
         Basemesh.populateMenu()
         self.BMRefreshImage()
         self.refreshUI(None)
+
+    def CLGetName(self, other):
+        # get name from selection
+        selection = cmds.ls(sl = True)[0]
+        cmds.textField(self.CLMeshNameField, e = True, text = selection)
+
+    def CLCreateCollider(self, other, colliderType):
+        # get the mesh name from the field
+        meshName = cmds.textField(self.CLMeshNameField, q = True, text = True)
+        Colliders.createCollider(colliderType = colliderType, meshName = meshName)
     
 x = GUI()
