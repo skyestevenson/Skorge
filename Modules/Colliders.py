@@ -8,6 +8,12 @@ def alert(message):
 
 def createCollider(colliderType, meshName):
 	if (meshName != ""):
+		# acreate a transparent material for the colliders
+		if not cmds.objExists("colliderBlinn"):
+			shader = cmds.shadingNode("blinn", name = "colliderBlinn", asShader = True)
+			cmds.setAttr("colliderBlinn.color", 0, 1, 0, type = "double3")
+			cmds.setAttr("colliderBlinn.transparency", 0.75, 0.75, 0.75, type = "double3")
+
 		# make the correct collider primitive
 		if (colliderType == "box"):
 			# create box collider
@@ -21,6 +27,9 @@ def createCollider(colliderType, meshName):
 		if (colliderType == "convex"):
 			# create convex collider
 			cmds.polyCube(name = "UCX_{}_#".format(meshName), w = 0.5, h = 0.5, d = 0.5, sx = 1, sy = 1, sz = 1, ax = [0, 1, 0])
+
+		# assign the material to the collider
+		cmds.hyperShade(assign = "colliderBlinn")
 
 		# if the mesh name correlates to a real object in the scene, move the primitive to the center of its bounding box!
 		if cmds.objExists(meshName):
