@@ -1,4 +1,5 @@
 import sys
+import os
 import maya.cmds as cmds
 import maya.mel as mel
 from functools import partial
@@ -14,6 +15,9 @@ projPath = cmds.workspace(q = True, rd = True)
 projScripts = projPath + "scripts/"
 print projPath
 print projScripts
+
+# make note file path
+noteFile = projPath + "data/SkorgeProjectNotes.txt"
 
 # allow Maya to see the Skorge Modules
 sys.path.append(skorgePath)
@@ -152,14 +156,35 @@ class GUI:
     def PNOpen(self, other):
         self.PNNoteWidth = 250
         self.PNNoteHeight = 300
-        self.PNNoteWindow = cmds.window(title = "Project notes", topLeftCorner = [350, 1500], backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.PNNoteWidth, h = self.PNNoteHeight, sizeable = True)
+        self.PNNoteWindow = cmds.window(title = "Project notes", topLeftCorner = [350, 1500], backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.PNNoteWidth, h = self.PNNoteHeight, sizeable = False)
         cmds.columnLayout(adjustableColumn = True)
         # add textbox
-        self.PNNoteField = cmds.scrollField(bgc = color2, height = self.PNNoteHeight, cc = partial(self.PNSaved))
+        self.PNNoteField = cmds.scrollField(bgc = color2, height = self.PNNoteHeight, cc = partial(self.PNSave), ww = True, font = "plainLabelFont")
+        t("Notes save automatically to your project folder.")
+        # load the notes from a file
+        self.PNLoad()
         # show notepad window
         cmds.showWindow(self.PNNoteWindow)
 
-    def PNSaved(self, other):
+    def PNLoad(self):
+        # open the noteFile and load it into the scrollfield
+        try:
+            # import the file as a string
+            PNFile = open(noteFile, "r")
+            PNFileContents = PNFile.read()
+            # assign it to the scrollfield
+            cmds.scrollField(self.PNNoteField, e = True, text = PNFileContents)
+        except:
+            return None
+
+
+    def PNSave(self, other):
+        # get the notes from the scrollfield
+        PNScrollText = cmds.scrollField(self.PNNoteField, q = True, text = True)
+        # save the notes to disk
+        PNFile = open(noteFile, "w")
+        PNFile.write(PNScrollText)
+        # alert the user that the notes have been saved
         import datetime
         alert(None, "Project notes saved, {}".format(datetime.datetime.now().strftime("%I:%M:%S %p")))
 
