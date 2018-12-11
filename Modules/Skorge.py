@@ -49,7 +49,7 @@ def dash():
     cmds.separator(horizontal = 1, height = 5, style = "single")
 # a collapsable frame that contains UI elements
 def frame(label, closed = False, note = ""):
-    cmds.frameLayout(label = label, collapsable = True, cl = closed, ann = note)
+    cmds.frameLayout(label = label, collapsable = True, cl = closed, ann = note, w = 128)
 # close a frame
 def closeFrame():
     cmds.setParent( '..' )
@@ -79,9 +79,10 @@ class GUI:
     # -------- MAIN FUNCTION --------
     def __init__(self):
         # set up main UI window
-        self.UIWidth = 128
-        self.window = cmds.window(title = "Skorge Alpha", topLeftCorner = [350, 1500], backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.UIWidth, rtf = False)
-        cmds.columnLayout(adjustableColumn = True)
+        self.UIWidth = 146
+        self.UIHeight = 600
+        self.window = cmds.window(title = "Skorge Alpha", topLeftCorner = [350, 1500], backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.UIWidth, h = self.UIHeight, rtf = False)
+        cmds.scrollLayout(hst = 0)
 
         # Skorge icon
         cmds.iconTextButton(style = "iconOnly", image1 = iconPath + "SkorgeIcon.png")
@@ -98,7 +99,7 @@ class GUI:
         closeFrame()
 
         # -------- UVing UI
-        frame(label = "UV Toolbox", closed = False, note = "")
+        frame(label = "UV Toolbox", closed = True, note = "")
         b(label = "Cut hard edges", command = "mel.eval('polyUVHardEdgesAutoSeams 1;')", width = None)
         closeFrame()
 
@@ -107,7 +108,7 @@ class GUI:
         self.CLMeshNameField = cmds.textField()
         b(label = "Get mesh name", command = partial(self.CLGetName), ann = "", width = None)
         cmds.rowColumnLayout(numberOfRows = 2)
-        self.QBWidth = 64
+        self.QBWidth = 63
         b(label = "Box", command = partial(self.CLCreateCollider, colliderType = "box"), width = self.QBWidth)
         b(label = "Capsule", command = partial(self.CLCreateCollider, colliderType = "capsule"), width = self.QBWidth)
         b(label = "Sphere", command = partial(self.CLCreateCollider, colliderType = "sphere"), width = self.QBWidth)
@@ -142,7 +143,7 @@ class GUI:
 
         # show main UI window
         cmds.showWindow(self.window)
-        
+
     # -------- UTILITY FUNCTIONS --------
     # refresh the UI
     # NOTE: the use of "other" here is because, since these are classed functions being called via partial
@@ -208,9 +209,9 @@ class GUI:
         iconFile = iconPath + "BMIcons/{}.jpg".format(self.BMSelection)
         import os.path
         if (os.path.isfile(iconFile)):
-            cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconFile, e = True, w = self.UIWidth)
+            cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconFile, e = True, w = 128, h = 128)
         else:
-            cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/BMDefault.jpg", e = True, w = self.UIWidth)
+            cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/BMDefault.jpg", e = True, w = 128, h = 128)
 
     def BMPopulateMenu(self):
         self.meshArray = Basemesh.populateMenu()
