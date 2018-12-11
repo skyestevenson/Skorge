@@ -37,7 +37,8 @@ reload(Colliders)
 def alert(self, message):
     sys.stdout.write(message)
 
-# -------- UI COLORS --------
+# -------- GLOBAL VARIABLES --------
+UIOrigin = (100, 100)
 accentColor = (0, .4, 1)
 buttonColor = (.2, .2, .2)
 
@@ -82,7 +83,7 @@ class GUI:
         # set up main UI window
         self.UIWidth = 146
         self.UIHeight = 625 
-        self.window = cmds.window(title = "Skorge Alpha", topLeftCorner = [350, 1500], backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.UIWidth, h = self.UIHeight, rtf = False)
+        self.window = cmds.window(title = "Skorge Alpha", topLeftCorner = UIOrigin, backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.UIWidth, h = self.UIHeight, rtf = False)
         cmds.scrollLayout(hst = 0)
 
         # Skorge icon
@@ -165,7 +166,7 @@ class GUI:
     def PNOpen(self, other):
         self.PNNoteWidth = 250
         self.PNNoteHeight = 300
-        self.PNNoteWindow = cmds.window(title = "Project notes", topLeftCorner = [350, 1500], backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.PNNoteWidth, h = self.PNNoteHeight, sizeable = False)
+        self.PNNoteWindow = cmds.window(title = "Project notes", topLeftCorner = UIOrigin, backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.PNNoteWidth, h = self.PNNoteHeight, sizeable = False)
         cmds.columnLayout(adjustableColumn = True)
         # add textbox
         self.PNNoteField = cmds.scrollField(bgc = buttonColor, height = self.PNNoteHeight, cc = partial(self.PNSave), ww = True, font = "plainLabelFont")
