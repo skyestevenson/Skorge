@@ -38,7 +38,8 @@ def alert(self, message):
     sys.stdout.write(message)
 
 # -------- UI COLORS --------
-color2 = (.2, .2, .2)
+accentColor = (0, .4, 1)
+buttonColor = (.2, .2, .2)
 
 # -------- UI FUNCTIONS --------
 # just text
@@ -49,16 +50,16 @@ def dash():
     cmds.separator(horizontal = 1, height = 5, style = "single")
 # a collapsable frame that contains UI elements
 def frame(label, closed = False, note = ""):
-    cmds.frameLayout(label = label, collapsable = True, cl = closed, ann = note, w = 128)
+    cmds.frameLayout(label = label, collapsable = True, cl = closed, ann = note, w = 128, bgc = accentColor)
 # close a frame
 def closeFrame():
     cmds.setParent( '..' )
 # button UI
 def b(label, command, width, ann = ""):
     if width is None:
-        cmds.button(label = label, command = command, ann = ann, bgc = color2)
+        cmds.button(label = label, command = command, ann = ann, bgc = buttonColor)
     else:
-        cmds.button(label = label, command = command, ann = ann, width = width, bgc = color2)
+        cmds.button(label = label, command = command, ann = ann, width = width, bgc = buttonColor)
 # checkbox UI
 def cb(label, onCommand, offCommand, ann, value = True):
     cmds.checkBox(label = label, onCommand = onCommand, offCommand = offCommand, ann = ann, value = value)
@@ -125,7 +126,7 @@ class GUI:
         # show an icon displaying the currently selected mesh
         cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/Human.jpg", height = self.UIWidth)
         # create a dropdown menu to select the mesh
-        self.meshSelectMenu = cmds.optionMenu(bgc = color2, cc = partial(self.refreshUI))
+        self.meshSelectMenu = cmds.optionMenu(bgc = buttonColor, cc = partial(self.refreshUI))
         self.BMMenu = self.BMPopulateMenu()
         self.BMRefreshImage()
         # add a button for querying the thing
@@ -167,7 +168,7 @@ class GUI:
         self.PNNoteWindow = cmds.window(title = "Project notes", topLeftCorner = [350, 1500], backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.PNNoteWidth, h = self.PNNoteHeight, sizeable = False)
         cmds.columnLayout(adjustableColumn = True)
         # add textbox
-        self.PNNoteField = cmds.scrollField(bgc = color2, height = self.PNNoteHeight, cc = partial(self.PNSave), ww = True, font = "plainLabelFont")
+        self.PNNoteField = cmds.scrollField(bgc = buttonColor, height = self.PNNoteHeight, cc = partial(self.PNSave), ww = True, font = "plainLabelFont")
         t("Notes save automatically to your project folder.")
         # load the notes from a file
         self.PNLoad()
