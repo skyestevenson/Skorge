@@ -80,7 +80,7 @@ class GUI:
     def __init__(self):
         # set up main UI window
         self.UIWidth = 146
-        self.UIHeight = 600
+        self.UIHeight = 625 
         self.window = cmds.window(title = "Skorge Alpha", topLeftCorner = [350, 1500], backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.UIWidth, h = self.UIHeight, rtf = False)
         cmds.scrollLayout(hst = 0)
 
@@ -91,16 +91,19 @@ class GUI:
         # Project notes UI
         frame(label = "Notepad", closed = False)
         b(label = "Open project notes", command = partial(self.PNOpen), width = None)
+        dash()
         closeFrame()
 
         # -------- Grid Spacing UI
         frame(label = "Grid Spacing", closed = True)
         self.testSlider = IntSlider(min = 4, max = 16, increment = 4)
+        dash()
         closeFrame()
 
         # -------- UVing UI
         frame(label = "UV Toolbox", closed = True, note = "")
         b(label = "Cut hard edges", command = "mel.eval('polyUVHardEdgesAutoSeams 1;')", width = None)
+        dash()
         closeFrame()
 
         # -------- Quick Collision UI
@@ -114,6 +117,7 @@ class GUI:
         b(label = "Sphere", command = partial(self.CLCreateCollider, colliderType = "sphere"), width = self.QBWidth)
         b(label = "Convex", command = partial(self.CLCreateCollider, colliderType = "convex"), width = self.QBWidth)
         closeFrame()
+        dash()
         closeFrame()
 
         # -------- Basemesh UI
@@ -127,6 +131,7 @@ class GUI:
         # add a button for querying the thing
         b(label = "Load selected", command = partial(self.BM_LoadMesh), ann = "Load a copy of the selected mesh into the scene.", width = None)
         b(label = "Add to library", command = partial(self.BMAddToLibrary), ann = "", width = None)
+        dash()
         closeFrame()
 
         # -------- Exporter UI
@@ -134,11 +139,13 @@ class GUI:
         self.originCB = cmds.checkBox(label = "Export from origin", ann = "Exports the mesh from the world space origin.", value = True)
         self.centimeterCB = cmds.checkBox(label = "Use centimeter scale", ann = "Scales the mesh up 100 times.", value = True)
         b(label = "Export Copy", command = partial(self.EXExport), ann = "Export a copy from the scene origin.", width = None)
+        dash()
         closeFrame()
 
         # -------- Extras UI
         frame(label = "Extras", closed = True, note = "")
         b(label = "Tell me a joke", command = partial(Joke.tellJoke), ann = "", width = None)
+        dash()
         closeFrame()
 
         # show main UI window
