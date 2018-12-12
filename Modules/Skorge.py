@@ -38,9 +38,11 @@ def alert(self, message):
     sys.stdout.write(message)
 
 # -------- GLOBAL VARIABLES --------
-UIOrigin = (100, 100)
+UIOrigin = (200, 100)
 accentColor = (0, .4, 1)
 buttonColor = (.2, .2, .2)
+UIWidth = 146
+UIHeight = 765
 
 # -------- UI FUNCTIONS --------
 # just text
@@ -81,9 +83,7 @@ class GUI:
     # -------- MAIN FUNCTION --------
     def __init__(self):
         # set up main UI window
-        self.UIWidth = 146
-        self.UIHeight = 625 
-        self.window = cmds.window(title = "Skorge Alpha", topLeftCorner = UIOrigin, backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.UIWidth, h = self.UIHeight, rtf = False)
+        self.window = cmds.window(title = "Skorge Alpha", topLeftCorner = UIOrigin, backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = UIWidth, h = UIHeight, rtf = False)
         cmds.scrollLayout(hst = 0)
 
         # Skorge icon
@@ -137,7 +137,7 @@ class GUI:
         # -------- Basemesh UI
         frame(label = "Mesh Library", closed = False, note = "Load meshes from the Skorge library.")
         # show an icon displaying the currently selected mesh
-        cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/BMDefault.jpg", height = self.UIWidth)
+        cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/BMDefault.jpg", height = UIWidth)
         # create a dropdown menu to select the mesh
         self.meshSelectMenu = cmds.optionMenu(bgc = buttonColor, cc = partial(self.refreshUI))
         self.BMMenu = self.BMPopulateMenu()
@@ -218,7 +218,7 @@ class GUI:
     def PNOpen(self, other):
         self.PNNoteWidth = 250
         self.PNNoteHeight = 300
-        self.PNNoteWindow = cmds.window(title = "Project notes", topLeftCorner = UIOrigin, backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.PNNoteWidth, h = self.PNNoteHeight, sizeable = False)
+        self.PNNoteWindow = cmds.window(title = "Project notes", topLeftCorner = (UIOrigin[0], UIOrigin[1] + 175), backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = self.PNNoteWidth, h = self.PNNoteHeight, sizeable = False)
         cmds.columnLayout(adjustableColumn = True)
         # add textbox
         self.PNNoteField = cmds.scrollField(bgc = buttonColor, height = self.PNNoteHeight, cc = partial(self.PNSave), ww = True, font = "plainLabelFont")
