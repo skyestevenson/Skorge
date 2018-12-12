@@ -96,20 +96,32 @@ class GUI:
         dash()
         closeFrame()
 
-        # -------- Grid Spacing UI
-        frame(label = "Grid Spacing", closed = True)
-        self.testSlider = IntSlider(min = 4, max = 16, increment = 4)
-        dash()
-        closeFrame()
-
         # -------- UVing UI
-        frame(label = "UV Toolbox", closed = True, note = "")
-        b(label = "Cut hard edges", command = "mel.eval('polyUVHardEdgesAutoSeams 1;')", width = None)
+        frame(label = "Quick UVs", closed = False, note = "")
+        self.UVBWidth = 127
+        cmds.columnLayout(nch = 5)
+        b(label = "Harden + cut edge", command = "mel.eval('polySoftEdge -a 0; polyMapCut -ch 1;')", width = self.UVBWidth)
+        dash()
+        # texel density menu
+        self.UVTexelDensityMenu = cmds.optionMenu(bgc = buttonColor, width = self.UVBWidth)
+        cmds.menuItem(label = "Texel Density: 512", p = self.UVTexelDensityMenu)
+        cmds.menuItem(label = "Texel Density: 1024", p = self.UVTexelDensityMenu)
+        cmds.menuItem(label = "Texel Density: 2048", p = self.UVTexelDensityMenu)
+        # Map Size menu
+        self.UVMapSizeMenu = cmds.optionMenu(bgc = buttonColor, width = self.UVBWidth)
+        cmds.menuItem(label = "Map Size: 512", p = self.UVMapSizeMenu)
+        cmds.menuItem(label = "Map Size: 1024", p = self.UVMapSizeMenu)
+        cmds.menuItem(label = "Map Size: 2048", p = self.UVMapSizeMenu)
+        cmds.menuItem(label = "Map Size: 4096", p = self.UVMapSizeMenu)
+        dash()
+        self.UVAlsoLayoutCB = cmds.checkBox(label = "Also layout UVs", value = False)
+        b(label = "Set texel density", command = partial(self.UVSetDensity), width = self.UVBWidth)
+        closeFrame()
         dash()
         closeFrame()
 
         # -------- Quick Collision UI
-        frame(label = "Quick Collision", closed = False, note = "Create properly named collision primitives.")
+        frame(label = "Quick Colliders", closed = False, note = "Create properly named collision primitives.")
         self.CLMeshNameField = cmds.textField()
         b(label = "Get mesh name", command = partial(self.CLGetName), ann = "", width = None)
         cmds.rowColumnLayout(numberOfRows = 2)
@@ -125,7 +137,7 @@ class GUI:
         # -------- Basemesh UI
         frame(label = "Mesh Library", closed = False, note = "Load meshes from the Skorge library.")
         # show an icon displaying the currently selected mesh
-        cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/Human.jpg", height = self.UIWidth)
+        cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/BMDefault.jpg", height = self.UIWidth)
         # create a dropdown menu to select the mesh
         self.meshSelectMenu = cmds.optionMenu(bgc = buttonColor, cc = partial(self.refreshUI))
         self.BMMenu = self.BMPopulateMenu()
@@ -162,6 +174,46 @@ class GUI:
         # refresh the Basemesh mesh preview
         self.BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
         self.BMRefreshImage()
+
+    def UVSetDensity(self, other):
+        # get the selected texel density and Map Size
+        texelDensity = cmds.optionMenu(self.UVTexelDensityMenu, query = True, value = True)
+        mapSize = cmds.optionMenu(self.UVMapSizeMenu, query = True, value = True)
+
+        # make it actual integers
+        if (texelDensity == "Texel Density: 512"):
+            texelDensity = 512
+        elif (texelDensity == "Texel Density: 1024"):
+            texelDensity = 1024
+        elif (texelDensity == "Texel Density: 2048"):
+            texelDensity = 2048
+
+        if (mapSize == "Map Size: 512"):
+            mapSize = 512
+        elif (mapSize == "Map Size: 1024"):
+            mapSize = 1024
+        elif (mapSize == "Map Size: 2048"):
+            mapSize = 2048
+        elif (mapSize == "Map Size: 4096"):
+            mapSize = 4096
+
+        # set the texel density using those values
+        texSetCommand = "texSetTexelDensity {} {};".format(texelDensity, mapSize)
+        mel.eval(texSetCommand)
+
+        # check if the user wants to layout the UVs
+        if (cmds.checkBox(self.UVAlsoLayoutCB, query = True, value = True)):
+            # progress alert
+            alert(None, "Setting texel density and laying out UVs...")
+
+            # layout the UVs
+            spacing = 0.01
+            margin = 0.02
+            layoutCommand = "u3dLayout -res {} -rmn 0 -rmx 360 -rst 30 -spc {} -mar {} -box 0 1 0 1 -ls 1;".format(mapSize, spacing, margin)
+            mel.eval(layoutCommand)
+
+            # progress alert
+            alert(None, "Texel density and layout completed!")
 
     def PNOpen(self, other):
         self.PNNoteWidth = 250
