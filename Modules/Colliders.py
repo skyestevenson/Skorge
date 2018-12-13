@@ -20,13 +20,13 @@ def createCollider(colliderType, meshName):
 			cmds.polyCube(name = "UBX_{}_#".format(meshName), w = 0.5, h = 0.5, d = 0.5, sx = 1, sy = 1, sz = 1, ax = [0, 1, 0])
 		if (colliderType == "capsule"):
 			# create capsule collider
-			cmds.polyCylinder(name = "UCP_{}_#".format(meshName), r = 0.25, h = 1, sx = 8, sy = 1, sz = 1, ax = [0, 1, 0])
+			cmds.polyCylinder(name = "UCP_{}_#".format(meshName), r = 0.25, h = 1, sx = 8, sy = 1, sz = 3, ax = [0, 1, 0], rcp = True)
 		if (colliderType == "sphere"):
 			# create sphere collider
 			cmds.polySphere(name = "USP_{}_#".format(meshName), r = 0.5, sx = 8, sy = 8, ax = [0, 1, 0])
 		if (colliderType == "convex"):
 			# create convex collider
-			cmds.polyCube(name = "UCX_{}_#".format(meshName), w = 0.5, h = 0.5, d = 0.5, sx = 1, sy = 1, sz = 1, ax = [0, 1, 0])
+			cmds.polyCylinder(name = "UCX_{}_#".format(meshName), r = 0.25, h = 1, sx = 8, sy = 1, sz = 1, ax = [0, 1, 0])
 
 		# assign the material to the collider
 		cmds.hyperShade(assign = "colliderBlinn")

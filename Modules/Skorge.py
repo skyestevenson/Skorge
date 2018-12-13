@@ -99,7 +99,7 @@ class GUI:
         # -------- UVing UI
         frame(label = "Quick UVs", closed = False, note = "")
         self.UVBWidth = 127
-        cmds.columnLayout(nch = 5)
+        cmds.columnLayout(nch = 6)
         b(label = "Harden + cut edge", command = "mel.eval('polySoftEdge -a 0; polyMapCut -ch 1;')", width = self.UVBWidth)
         dash()
         # texel density menu
@@ -115,6 +115,7 @@ class GUI:
         cmds.menuItem(label = "Map Size: 4096", p = self.UVMapSizeMenu)
         dash()
         self.UVAlsoLayoutCB = cmds.checkBox(label = "Also layout UVs", value = False)
+        dash()
         b(label = "Set texel density", command = partial(self.UVSetDensity), width = self.UVBWidth)
         closeFrame()
         dash()
@@ -122,8 +123,10 @@ class GUI:
 
         # -------- Quick Collision UI
         frame(label = "Quick Colliders", closed = False, note = "Create properly named collision primitives.")
-        self.CLMeshNameField = cmds.textField()
-        b(label = "Get mesh name", command = partial(self.CLGetName), ann = "", width = None)
+        cmds.columnLayout(nch = 4)
+        self.CLMeshNameField = cmds.textField(width = 127)
+        b(label = "Get mesh name", command = partial(self.CLGetName), ann = "", width = 127)
+        dash()
         cmds.rowColumnLayout(numberOfRows = 2)
         self.QBWidth = 63
         b(label = "Box", command = partial(self.CLCreateCollider, colliderType = "box"), width = self.QBWidth)
@@ -131,28 +134,35 @@ class GUI:
         b(label = "Sphere", command = partial(self.CLCreateCollider, colliderType = "sphere"), width = self.QBWidth)
         b(label = "Convex", command = partial(self.CLCreateCollider, colliderType = "convex"), width = self.QBWidth)
         closeFrame()
+        closeFrame()
         dash()
         closeFrame()
 
         # -------- Basemesh UI
         frame(label = "Mesh Library", closed = False, note = "Load meshes from the Skorge library.")
         # show an icon displaying the currently selected mesh
+        cmds.columnLayout(nch = 4)
         cmds.iconTextButton("BMPreview", style = "iconOnly", image1 = iconPath + "BMIcons/BMDefault.jpg", height = UIWidth)
         # create a dropdown menu to select the mesh
-        self.meshSelectMenu = cmds.optionMenu(bgc = buttonColor, cc = partial(self.refreshUI))
+        self.meshSelectMenu = cmds.optionMenu(bgc = buttonColor, cc = partial(self.refreshUI), width = 127)
+        dash()
         self.BMMenu = self.BMPopulateMenu()
         self.BMRefreshImage()
         # add a button for querying the thing
-        b(label = "Load selected", command = partial(self.BM_LoadMesh), ann = "Load a copy of the selected mesh into the scene.", width = None)
-        b(label = "Add to library", command = partial(self.BMAddToLibrary), ann = "", width = None)
+        b(label = "Load selected", command = partial(self.BM_LoadMesh), ann = "Load a copy of the selected mesh into the scene.", width = 127)
+        b(label = "Add to library", command = partial(self.BMAddToLibrary), ann = "", width = 127)
+        closeFrame()
         dash()
         closeFrame()
 
         # -------- Exporter UI
         frame(label = "Exporter", closed = False, note = "")
+        cmds.columnLayout(nch = 4)
         self.originCB = cmds.checkBox(label = "Export from origin", ann = "Exports the mesh from the world space origin.", value = True)
         self.centimeterCB = cmds.checkBox(label = "Use centimeter scale", ann = "Scales the mesh up 100 times.", value = True)
-        b(label = "Export Copy", command = partial(self.EXExport), ann = "Export a copy from the scene origin.", width = None)
+        dash()
+        b(label = "Export Copy", command = partial(self.EXExport), ann = "Export a copy from the scene origin.", width = 127)
+        closeFrame()
         dash()
         closeFrame()
 
