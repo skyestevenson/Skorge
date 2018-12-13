@@ -83,11 +83,11 @@ class GUI:
     # -------- MAIN FUNCTION --------
     def __init__(self):
         # set up main UI window
-        self.window = cmds.window(title = "Skorge Alpha", topLeftCorner = UIOrigin, backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = UIWidth, h = UIHeight, rtf = False)
+        self.window = cmds.window(title = "Skorge 1.0", topLeftCorner = UIOrigin, backgroundColor = [0.15, 0.15, 0.15], toolbox = True, s = False, w = UIWidth, h = UIHeight, rtf = False)
         cmds.scrollLayout(hst = 0)
 
         # Skorge icon
-        cmds.iconTextButton(style = "iconOnly", image1 = iconPath + "SkorgeIcon.png")
+        cmds.iconTextButton(style = "iconOnly", image1 = iconPath + "SkorgeIcon.png", c = partial(self.about))
         dash()
 
         # Project notes UI
@@ -184,6 +184,9 @@ class GUI:
         # refresh the Basemesh mesh preview
         self.BMSelection = cmds.optionMenu(self.meshSelectMenu, query = True, value = True)
         self.BMRefreshImage()
+
+    def about(self):
+        alert(None, "SKORGE: SIMPLIFIED KREATION OPTIMIZED with RESEARCH for GAME EFFICIENCY - by Skye Stevenson and Jorge Luz")
 
     def UVSetDensity(self, other):
         # get the selected texel density and Map Size
