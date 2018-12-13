@@ -207,6 +207,11 @@ class GUI:
         elif (mapSize == "Map Size: 4096"):
             mapSize = 4096
 
+        # unfold, optimize and orient the UV shells
+        mel.eval("u3dUnfold -ite 1 -p 0 -bi 1 -tf 1 -ms 1024 -rs 0;")
+        mel.eval("u3dOptimize -ite 64 -pow 1 -sa 1 -bi 0 -tf 1 -ms 1024 -rs 0;")
+        mel.eval("texOrientShells;")
+
         # set the texel density using those values
         texSetCommand = "texSetTexelDensity {} {};".format(texelDensity, mapSize)
         mel.eval(texSetCommand)
